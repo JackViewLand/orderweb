@@ -4,7 +4,7 @@
 	<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Login</title>
+	<title>Homepage</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Free HTML5 Website Template by GetTemplates.co" />
 	<meta name="keywords" content="free website templates, free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive" />
@@ -67,44 +67,62 @@
 			
 			<div class="row">
 				<div class="col-sm-4 col-xs-12">
-					<div id="gtco-logo"><a href="/">Home<em>.</em></a></div>
+					<div id="gtco-logo">
+						<a href="/">
+							{%if name %}
+							<em><br>Welcome {{name}} !</em>
+							{%else%}
+							Home
+							{%endif%}
+						</a>
+					</div>
 				</div>
 				<div class="col-xs-8 text-right menu-1">
 					<ul>
 						<li><a href="/menu">Menu</a></li>
+						{%if name %}
+						<li class="has-dropdown">
+							<a>User</a>
+							<ul class="dropdown">
+								<li><a href="/user">Order Information</a></li>
+							</ul>
+						</li>
+						<li class="btn-cta"><a href="/logout"><span>logout</span></a></li>
+						{%else%}
+						<li class="btn-cta"><a href="/login"><span>login</span></a></li>
+						{%endif%}
 					</ul>	
 				</div>
 			</div>
+			
 		</div>
 	</nav>
 	
-	<div id="gtco-subscribe">
+	<header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(/static/images/img_bg_1.jpg)" data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
 		<div class="gtco-container">
-			<div class="row animate-box">
-				<div class="col-md-8 col-md-offset-2 text-center gtco-heading">
-					<h2 class="cursive-font">login</h2>
-					<p>Welcome</p>
-				</div>
-			</div>
-			<div class="row animate-box">
-				<div class="col-md-8 col-md-offset-4">
-					<form class="form" method="POST">
-						<div class="col-md-6 col-sm-6">
-							<div class="form-group">
-								<label for="email" class="sr-only">Email</label>
-								<input type="text" class="form-control" name="email" placeholder="Your Email" required="required"></br>
-								<label for="password" class="sr-only">password</label>
-								<input type="password" class="form-control" name="password" placeholder="Your Password" required="required"></br>
-								<button type="submit" class="btn btn-default btn-block" name="submit" value="login" >login</button>
-								<button type="button" class="btn btn-default btn-block" onclick="location.href='/signup'">Signup</button>
-							</div>
+			<div class="row">
+				<div class="col-md-12 col-md-offset-0 text-left">
+					<div class="row row-mt-15em">
+						<div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp">
+	
+							{%for cal in calendar:%}
+							<h3 align="center" style="color:white">{{cal['title']}} {{cal['start_event']}} <button style='color:black' onclick="window.location.replace('/user/cancel/{{cal['id']}}')";>取消</button></h3>
+							{%endfor%}
+							
 						</div>
-					</form>
+					<div>
 				</div>
 			</div>
-			<center><font color="yellow" font size="4" face="serif">{{content}}</font></center>
 		</div>
-	</div>
+	</header>
+
+
+	
+
+	
+	
+
 
 	<!-- </div> -->
 
