@@ -32,7 +32,7 @@ def user():
                 del c['_id'],c['end_event']
                 return render_template('booking.html',name=name,calendar=calendar)
         else:
-            return "<a href='/'>無訂位資料!</a>"
+            return render_template('booking.html',name=name,calendar=calendar)
     except:
             return index()
 
@@ -45,35 +45,41 @@ def cancel(id):
 
 @app.route('/reserve')
 def reserve():
-    persons=request.args.get('persons')
-    date=request.args.get('date')
-    date=date.split('/')
-    day,month,year=date
-    time=request.args.get('time')
-    t = time.split(' ')[0].split(':')
-    if 'PM' in time:
-        hour,mins=t
-        hour=int(hour)+12
-        start_time=f'{hour}:{mins}:00'
-        end_time=f'{hour+2}:{mins}:00'
-    else:
-        hour,mins=t
-        start_time=f'{hour}:{mins}:00'
-        end_time=f'{hour+2}:{mins}:00'
-    start=f'{year}-{month}-{day} {start_time}'
-    end=f'{year}-{month}-{day} {end_time}'
     if 'name' in session:
-        name=session['name']
-        title=f'{name} {persons}位'
-    data=[title,start,end]
-    print(data)
+        persons=request.args.get('persons')
+        date=request.args.get('date')
+        time=request.args.get('time')
 
-    dbname = get_database()
-    collection= dbname["events"]
-    data={'title':title,'start_event':start,'end_event':end,'id':str(title)+str(ObjectId())}
-    collection.insert_one(data)  
-    return "<script>alert('Success');window.location.replace('/');</script>"
-    
+        try:
+            date=date.split('/')
+            day,month,year=date
+            t = time.split(' ')[0].split(':')
+            hour,mins=t
+            hour=int(hour)
+            if 'PM' in time:
+                hour=hour+12
+                start_time=f'{hour}:{mins}:00'
+                end_time=f'{hour+2}:{mins}:00'
+            else:
+                start_time=f'{hour}:{mins}:00'
+                end_time=f'{hour+2}:{mins}:00'
+            start=f'{year}-{month}-{day} {start_time}'
+            end=f'{year}-{month}-{day} {end_time}'
+            if 'name' in session:
+                name=session['name']
+                title=f'{name} {persons}位'
+            data=[title,start,end]
+            print(data)
+
+            dbname = get_database()
+            collection= dbname["events"]
+            data={'title':title,'start_event':start,'end_event':end,'id':str(title)+str(ObjectId())}
+            collection.insert_one(data)  
+            return "<script>alert('Success');window.location.replace('/user');</script>"
+        except:
+            return "<script>alert('Please try again!');window.location.replace('/#');</script>"
+    else:
+        return "<script>alert('Please login');window.location.replace('/login');</script>"
 
 @app.route("/signup",methods=['GET','POST'])
 def signup():
@@ -88,7 +94,7 @@ def signup():
             result=collection.find_one({'email':email})
             if result is None:
                 collection.insert_one(user_data)
-                content='Success!'
+                return "<script>alert('Success');window.location.replace('/login');</script>"
             else:
                 content='Email is already in use!'
             return render_template('signup.html',content=content)
@@ -123,6 +129,10 @@ def logout():
 
 @app.route('/menu')
 def menu():
+    if 'name' in session:
+        name=session['name']
+        print(name)
+        return render_template('menu.html',name=name)
     return render_template('menu.html')
 
 @app.route('/admin',methods=['GET','POST'])

@@ -79,6 +79,7 @@
 				</div>
 				<div class="col-xs-8 text-right menu-1">
 					<ul>
+						<li><a href="/">Home</a></li>
 						<li><a href="/menu">Menu</a></li>
 						{%if name %}
 						<li class="has-dropdown">
@@ -106,9 +107,13 @@
 					<div class="row row-mt-15em">
 						<div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp">
 	
+							{%if calendar%}
 							{%for cal in calendar:%}
 							<h3 align="center" style="color:white">{{cal['title']}} {{cal['start_event']}} <button style='color:black' onclick="window.location.replace('/user/cancel/{{cal['id']}}')";>取消</button></h3>
 							{%endfor%}
+							{%else%}
+							<h3 align="center" style="color:white">無訂位資料!</h3>
+							{%endif%}
 							
 						</div>
 					<div>
